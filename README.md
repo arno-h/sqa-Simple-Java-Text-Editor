@@ -47,20 +47,6 @@
 * Achintha Gunasekara: contact [AT] achinthagunasekara [D0T] com
 
 
-## DEMO
-
-Download the Jar file and double click to run
-
-Or run `java -jar SimpleJavaTextEditor.jar` from the command line
-
-You can also generate easily a new jar file with the following command when you are in *src/* directory `jar cmvf ../manifest.mf ../SimpleJavaTextEditor.jar simplejavatexteditor/*.class`
-
-
-### Important
-
-**Icons directory and its files must be present on the path when running the application (so you will have to move "*icons/*" into "*src/*" directory)**
-
-
 ## LICENSE
 
-Apache License, Version 2.0 or later; See the license.txt file in the notepad folder.
+Apache License, Version 2.0 or later; See the license.txt file.
