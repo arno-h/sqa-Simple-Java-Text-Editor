@@ -59,17 +59,13 @@ import javax.swing.text.DefaultEditorKit;
 public class UI extends JFrame implements ActionListener {
 
     private final String[] dragDropExtensionFilter = {".txt", ".dat", ".log", ".xml", ".mf", ".html"};
-    private static long serialVersionUID = 1L;
     private final JTextArea textArea;
-    private final JMenuBar menuBar;
     private final JComboBox<String> fontType;
     private final JComboBox<Integer> fontSize;
-    private final JMenu menuFile, menuEdit, menuFind, menuAbout;
-    private final JMenuItem newFile, openFile, saveFile, close, cut, copy, paste, clearFile, selectAll, quickFind,
-            aboutMe, aboutSoftware, wordWrap;
-    private final JToolBar mainToolbar;
-    JButton newButton, openButton, saveButton, clearButton, quickButton, aboutMeButton, aboutButton, closeButton, boldButton, italicButton;
-    private final Action selectAllAction;
+    private final JMenuItem newFile, openFile, saveFile, close, clearFile;
+    private final JMenuItem quickFind, aboutMe, aboutSoftware;
+    final JButton newButton, openButton, saveButton, clearButton, quickButton;
+    final JButton aboutMeButton, aboutButton, closeButton, boldButton, italicButton;
 
     //setup icons - Bold and Italic
     private final ImageIcon boldIcon = new ImageIcon(UI.class.getResource("/icons/bold.png"));
@@ -96,8 +92,8 @@ public class UI extends JFrame implements ActionListener {
     private final ImageIcon aboutMeIcon = new ImageIcon(UI.class.getResource("/icons/about_me.png"));
     private final ImageIcon aboutIcon = new ImageIcon(UI.class.getResource("/icons/about.png"));
 
-    private SupportedKeywords kw = new SupportedKeywords();
-    private HighlightText languageHighlighter = new HighlightText(Color.GRAY);
+    private final SupportedKeywords kw = new SupportedKeywords();
+    private final HighlightText languageHighlighter = new HighlightText(Color.GRAY);
     AutoComplete autocomplete;
     private boolean hasListener = false;
     private boolean edit = false;
@@ -161,10 +157,10 @@ public class UI extends JFrame implements ActionListener {
         getContentPane().add(panel);
 
         // Set the Menus
-        menuFile = new JMenu("File");
-        menuEdit = new JMenu("Edit");
-        menuFind = new JMenu("Search");
-        menuAbout = new JMenu("About");
+        JMenu menuFile = new JMenu("File");
+        JMenu menuEdit = new JMenu("Edit");
+        JMenu menuFind = new JMenu("Search");
+        JMenu menuAbout = new JMenu("About");
         //Font Settings menu
 
         // Set the Items Menu
@@ -177,7 +173,7 @@ public class UI extends JFrame implements ActionListener {
         aboutMe = new JMenuItem("About Me", aboutMeIcon);
         aboutSoftware = new JMenuItem("About Software", aboutIcon);
 
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
         menuBar.add(menuFind);
@@ -187,8 +183,7 @@ public class UI extends JFrame implements ActionListener {
         this.setJMenuBar(menuBar);
 
         // Set Actions:
-        selectAllAction = new SelectAllAction("Select All", clearIcon, "Select all text", new Integer(KeyEvent.VK_A),
-                textArea);
+        Action selectAllAction = new SelectAllAction("Select All", clearIcon, "Select all text", KeyEvent.VK_A);
 
         this.setJMenuBar(menuBar);
 
@@ -221,7 +216,7 @@ public class UI extends JFrame implements ActionListener {
         menuFile.add(close);
 
         // Select All Text
-        selectAll = new JMenuItem(selectAllAction);
+        JMenuItem selectAll = new JMenuItem(selectAllAction);
         selectAll.setText("Select All");
         selectAll.setIcon(selectAllIcon);
         selectAll.setToolTipText("Select All");
@@ -234,7 +229,7 @@ public class UI extends JFrame implements ActionListener {
         menuEdit.add(clearFile);
 
         // Cut Text
-        cut = new JMenuItem(new DefaultEditorKit.CutAction());
+        JMenuItem cut = new JMenuItem(new DefaultEditorKit.CutAction());
         cut.setText("Cut");
         cut.setIcon(cutIcon);
         cut.setToolTipText("Cut");
@@ -242,7 +237,7 @@ public class UI extends JFrame implements ActionListener {
         menuEdit.add(cut);
 
         // WordWrap
-        wordWrap = new JMenuItem();
+        JMenuItem wordWrap = new JMenuItem();
         wordWrap.setText("Word Wrap");
         wordWrap.setIcon(wordwrapIcon);
         wordWrap.setToolTipText("Word Wrap");
@@ -254,18 +249,16 @@ public class UI extends JFrame implements ActionListener {
         /* CODE FOR WORD WRAP OPERATION
          * BY DEFAULT WORD WRAPPING IS ENABLED.
          */
-        wordWrap.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                // If wrapping is false then after clicking on menuitem the word wrapping will be enabled
-                /* Setting word wrapping to true */
-                // else  if wrapping is true then after clicking on menuitem the word wrapping will be disabled
-                /* Setting word wrapping to false */
-                textArea.setLineWrap(!textArea.getLineWrap());
-            }
+        wordWrap.addActionListener(ev -> {
+            // If wrapping is false then after clicking on menuitem the word wrapping will be enabled
+            /* Setting word wrapping to true */
+            // else  if wrapping is true then after clicking on menuitem the word wrapping will be disabled
+            /* Setting word wrapping to false */
+            textArea.setLineWrap(!textArea.getLineWrap());
         });
 
         // Copy Text
-        copy = new JMenuItem(new DefaultEditorKit.CopyAction());
+        JMenuItem copy = new JMenuItem(new DefaultEditorKit.CopyAction());
         copy.setText("Copy");
         copy.setIcon(copyIcon);
         copy.setToolTipText("Copy");
@@ -273,7 +266,7 @@ public class UI extends JFrame implements ActionListener {
         menuEdit.add(copy);
 
         // Paste Text
-        paste = new JMenuItem(new DefaultEditorKit.PasteAction());
+        JMenuItem paste = new JMenuItem(new DefaultEditorKit.PasteAction());
         paste.setText("Paste");
         paste.setIcon(pasteIcon);
         paste.setToolTipText("Paste");
@@ -295,7 +288,7 @@ public class UI extends JFrame implements ActionListener {
         aboutSoftware.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
         menuAbout.add(aboutSoftware);
 
-        mainToolbar = new JToolBar();
+        JToolBar mainToolbar = new JToolBar();
         this.add(mainToolbar, BorderLayout.NORTH);
         // used to create space between button groups
         newButton = new JButton(newIcon);
@@ -357,11 +350,11 @@ public class UI extends JFrame implements ActionListener {
         italicButton.addActionListener(this);
         mainToolbar.add(italicButton);
         mainToolbar.addSeparator();
-        /**
-         * **************** FONT SETTINGS SECTION **********************
+        /*
+         ***************** FONT SETTINGS SECTION **********************
          */
         //FONT FAMILY SETTINGS SECTION START
-        fontType = new JComboBox<String>();
+        fontType = new JComboBox<>();
 
         //GETTING ALL AVAILABLE FONT FOMILY NAMES
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -377,19 +370,17 @@ public class UI extends JFrame implements ActionListener {
         mainToolbar.addSeparator();
 
         //Adding Action Listener on fontType JComboBox
-        fontType.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                //Getting the selected fontType value from ComboBox
-                String p = fontType.getSelectedItem().toString();
-                //Getting size of the current font or text
-                int s = textArea.getFont().getSize();
-                textArea.setFont(new Font(p, Font.PLAIN, s));
-            }
+        fontType.addActionListener(ev -> {
+            //Getting the selected fontType value from ComboBox
+            String p = fontType.getSelectedItem().toString();
+            //Getting size of the current font or text
+            int s = textArea.getFont().getSize();
+            textArea.setFont(new Font(p, Font.PLAIN, s));
         });
 
         //FONT FAMILY SETTINGS SECTION END
         //FONT SIZE SETTINGS START
-        fontSize = new JComboBox<Integer>();
+        fontSize = new JComboBox<>();
 
         for (int i = 5; i <= 100; i++) {
             fontSize.addItem(i);
@@ -398,15 +389,13 @@ public class UI extends JFrame implements ActionListener {
         fontSize.setToolTipText("Font Size");
         mainToolbar.add(fontSize);
 
-        fontSize.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                String sizeValue = fontSize.getSelectedItem().toString();
-                int sizeOfFont = Integer.parseInt(sizeValue);
-                String fontFamily = textArea.getFont().getFamily();
+        fontSize.addActionListener(ev -> {
+            String sizeValue = fontSize.getSelectedItem().toString();
+            int sizeOfFont = Integer.parseInt(sizeValue);
+            String fontFamily = textArea.getFont().getFamily();
 
-                Font font1 = new Font(fontFamily, Font.PLAIN, sizeOfFont);
-                textArea.setFont(font1);
-            }
+            Font font1 = new Font(fontFamily, Font.PLAIN, sizeOfFont);
+            textArea.setFont(font1);
         });
         //FONT SIZE SETTINGS SECTION END
     }
@@ -576,9 +565,7 @@ public class UI extends JFrame implements ActionListener {
         /**
          * Used for Select All function
          */
-        private static final long serialVersionUID = 1L;
-
-        public SelectAllAction(String text, ImageIcon icon, String desc, Integer mnemonic, final JTextArea textArea) {
+        public SelectAllAction(String text, ImageIcon icon, String desc, Integer mnemonic) {
             super(text, icon);
             putValue(SHORT_DESCRIPTION, desc);
             putValue(MNEMONIC_KEY, mnemonic);
@@ -616,7 +603,7 @@ public class UI extends JFrame implements ActionListener {
             }
         }
     }
-    DropTargetListener dropTargetListener = new DropTargetListener() {
+    final DropTargetListener dropTargetListener = new DropTargetListener() {
 
         @Override
         public void dragEnter(DropTargetDragEvent e) {
@@ -669,7 +656,7 @@ public class UI extends JFrame implements ActionListener {
                                 JOptionPane.showMessageDialog(UI.this, "This file is not allowed for drag & drop", "Error", JOptionPane.ERROR_MESSAGE);
 
                             } else {
-                                FileInputStream fis = new FileInputStream(new File(fileName));
+                                FileInputStream fis = new FileInputStream(fileName);
                                 byte[] ba = new byte[fis.available()];
                                 fis.read(ba);
                                 textArea.setText(new String(ba));

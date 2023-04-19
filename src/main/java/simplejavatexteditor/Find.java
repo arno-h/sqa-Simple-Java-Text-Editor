@@ -34,9 +34,15 @@ import java.awt.event.ActionListener;
 public class Find extends JFrame implements ActionListener {
     int startIndex = 0;
     int select_start = -1;
-    JLabel lab1, lab2;
-    JTextField textF, textR;
-    JButton findBtn, findNext, replace, replaceAll, cancel;
+    final JLabel lab1;
+    final JLabel lab2;
+    final JTextField textF;
+    final JTextField textR;
+    final JButton findBtn;
+    final JButton findNext;
+    final JButton replace;
+    final JButton replaceAll;
+    final JButton cancel;
     private final JTextArea txt;
 
     public Find(JTextArea text) {
